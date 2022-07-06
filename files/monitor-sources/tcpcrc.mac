@@ -468,4 +468,4 @@ FIXSUM:	TXNN SUM,<^-CKSMSK>	; Any bits outside the mask?
 	TNXEND
 	END
 
-    
+
