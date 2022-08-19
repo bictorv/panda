@@ -173,13 +173,16 @@ IFNDEF DHPRSW,<DHPRSW==-1>
 IFE DHPRSW,<
 	EXT	<HSTGUD,BSTLCL>	; Externally supplied at some sites
 >				; (IPIPIP.MAC at MIT)
-
 ; Code doesn't fully support class CH (Chaosnet) yet,
 ; so turn off Chaos-specific things even at MIT.
-	CHAOS==0		; Temporary!
+;;	CHAOS==0		; Temporary!
 
 ; Default is no Chaosnet code for non-MIT monitors.
-IFNDEF CHAOS,<CHAOS==0>
+IFNDEF CHAOS,<CHAOS==1>
+
+ifn chaos,<
+	ext <chaddn>
+>
 
 	SUBTTL	GTDOM% JSYS
 
@@ -1313,19 +1316,21 @@ CTOD:	SKIPLE T2		; Make sure it's a legal Chaos address
 	  IDPB T2,T1		; Write it into string
 	  SOJG T4,TOP.		; Next digit
 	ENDDO.
-	MOVE T2,[POINT 7,CHADDR]
+	MOVE T2,[POINT 7,CHADDN]	;Chaos address domain, e.g. CH-ADDR.NET
 	DO.			; Tack on suffix strings
 	  ILDB T3,T2
 	  JUMPE T3,ENDLP.
 	  IDPB T3,T1
 	  LOOP.
 	ENDDO.
+ifn 0,<
 	MOVE T2,CHDOMN		; Pointer to our chaosnet domain name
 	DO.
 	  ILDB T3,T2
 	  IDPB T3,T1
 	  JUMPN T3,TOP.
 	ENDDO.
+>
 	RETSKP			; Return success
 
 ; String to append to domain-name-formatted address.
@@ -1941,4 +1946,3 @@ RS RNDM,1			; Current random vector
 
 	TNXEND
 	END
-

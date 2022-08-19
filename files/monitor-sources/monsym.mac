@@ -1368,6 +1368,10 @@ DEFJS SCTTY,324,MSEC1,,OLD
 DEFJS OPRFN,326,,NIM,OLD	;TOPS20AN, Obsolete
 				;327-335 reserved
 DEFJS SETER,336,MSEC1,,OLD
+
+IFN CHAOS,<
+DEFJS CHANM,460,MSEC1
+>
 ;NEW (NOT IN BBN TENEX) JSYS'S ADDED STARTING AT 500
 
 DEFJS RSCAN,500,MSEC1,,OLD
@@ -1866,6 +1870,13 @@ CR%ACS==:1B3			;SET ACS FROM BLOCK
 CR%ST==:1B4			;START PROCESS AT PC
 CR%PCV==:777777B35		;VALUE OF PC
 
+IFN CHAOS,<
+;CHANM%
+
+.CHNPH==:0			;GET LOCAL HOST INFORMATION
+.CHNSN==:1			;TRANSLATE HOST NAME TO NUMBER
+.CHNNS==:2			;TRANSLATE HOST NUMBER TO NAME
+>
 	SUBTTL CHFDB
 
 ;CHFDB
@@ -6448,6 +6459,9 @@ SF%LSN==:1B0			;[7322]LSN flag bit, 1=include  0=ignore
 .SFPEX==:103			;[9040] Password expiration
 .SFPWD==:104			;[9040] Password dictionary function
 .SFHDT==:105			;[9040] Hangup on DETACH
+IFN CHAOS,<
+.SFCHA==:110			;Turn on and off Chaosnet Access Needed flag (@@@@ new value)
+>
 ;SMON/TMON bit masks
 
 SF%FAC==:1B<.SFFAC>		;FACT ENTRIES ALLOWED
@@ -7124,6 +7138,9 @@ SC%NAS==:1B25	      ;TOPS20AN	;NETWORK ABSOLUTE SOCKET PRIVILEGE
 SC%DNA==:1B26			;DECNET ACCESS ALLOWED
 SC%ANA==:1B27	      ;TOPS20AN ;ARPANET ACCESS ALLOWED
 SC%SEM==:1B28			;[7.1077]SEMI-OPR PRIVILEGES
+IFN CHAOS,<
+SC%CHA==:1B34			;Chaosnet privileges
+>
 IFN PANDASW,<	;[1]
 SC%ADM==:1B35			;Administrator
 >;IFN PANDASW
@@ -8640,6 +8657,18 @@ DEFINE .ERCOD <
 .ERR (2773,ENQX24,<Internal resources exhausted (No more SCA buffers)>)  ;[7.1072]
 .ERR (2774,DIRX6,<Structure INDEX-TABLE damaged>) ;[8822]
 .ERR (3033,MSTX43,<Illegal to dismount structure during initialization>)
+
+IFN CHAOS,<
+; MIT Chaos errors
+.ERR (3044,CHAOX1,<LOS received for connection>)
+.ERR (3045,CHAOX2,<Connection not in correct state>)
+.ERR (3046,CHAOX3,<Byte count too large>)
+.ERR (3047,CHAOX4,<No LOS received for connection>)
+.ERR (3050,CHAOX5,<Not allowed to use Chaosnet>)
+.ERR (3100,CHNX01,<Invalid or Unknown Chaosnet Host Name>)
+.ERR (3101,CHNX02,<Invalid or Unknown Chaosnet Host Number>)
+.ERR (3102,CHNX03,<Local Chaosnet host information not set>)
+>
 
 ; DEC TCP JSYS Interface Errors
 
