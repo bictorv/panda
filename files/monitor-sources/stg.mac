@@ -4275,7 +4275,8 @@ RS CHATXQ,1			;TRANSMIT QUEUE
 
 RS CHIPGW,1			;Chaos-IP-gateway
 RS CHIQHD,1			;Chaos IP queue handle
-RS CHADDN,^d50/5		;Chaosnet adress domain, e.g. CH-ADDR.NET
+;Chaosnet adress domain, e.g. CH-ADDR.NET
+RSI CHADDN,<<byte(7) 7,"C","H","-","A">,<byte(7) "D","D","R",3,"N">,<byte(7) "E","T",0>>,^d50/5
 RS CHIIPB,<PKTELI+<MINIHS+3>/3+4+<^d<488/4>>>	;Chaos RCVIN input buffer
 RS CHOPPB,<PKTELI+<MINIHS+3>/3+4+<^d<488/4>>>	;Chaos output buffer
 RS CHPKTI,1			;input pkt ptr (CHINET)

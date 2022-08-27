@@ -389,6 +389,7 @@ IFN CHINET,<
 IFN ARPAF!CHINET,<
 	EXTN <CHATPB>
 >;ARPAF!CHINET
+	;; EXTN PADCHD		;MNETDV
 
 DEBUG,<IF1,< PRINTX Debugging support >>
 DEFINE CHKCON <			;;;CHECK THE CONNECTION REF'ED BY CONN IF DEBUGGING
@@ -2155,17 +2156,12 @@ ife 0,<
 	gthst%
 	 erjmp .+1
 repeat 0,<
+	;; Default is in STG now
 	skipe chaddn		;Chaos address domain
 	ifskp.
 	 ;; Default value
-	 move t1,[point 7,chaddn]
-	 move t2,[point 7,[asciz "CH-ADDR.NET"]]
-	 do.
-	  ildb t3,t2
-	  idpb t3,t1
-	  jumpe t3,endlp.
-	  loop.
-	 od.
+	 move t4,[point 7,[asciz "CH-ADDR.NET"]]
+	 callx (xcdsec,padchd)		;Parse it properly
 	endif.
 >
 >

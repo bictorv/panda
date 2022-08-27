@@ -1316,15 +1316,27 @@ CTOD:	SKIPLE T2		; Make sure it's a legal Chaos address
 	  IDPB T2,T1		; Write it into string
 	  SOJG T4,TOP.		; Next digit
 	ENDDO.
-	MOVE T2,[POINT 7,CHADDN]	;Chaos address domain, e.g. CH-ADDR.NET
+ife 0,<
+	MOVE T2,[POINT 7,CHADDN]	;Chaos address domain, e.g. CH-ADDR.NET, in label format
 	DO.			; Tack on suffix strings
 	  ILDB T3,T2
 	  JUMPE T3,ENDLP.
 	  IDPB T3,T1
 	  LOOP.
 	ENDDO.
-ifn 0,<
-	MOVE T2,CHDOMN		; Pointer to our chaosnet domain name
+	;; Make sure there is an empty label at the end
+	idpb t3,t1
+	idpb t3,t1
+>
+ife 1,<
+	MOVE T2,[POINT 7,CHADDR]	;Chaos address domain, e.g. CH-ADDR.NET
+	DO.			; Tack on suffix strings
+	  ILDB T3,T2
+	  JUMPE T3,ENDLP.
+	  IDPB T3,T1
+	  LOOP.
+	ENDDO.
+	MOVE T2,[POINT 7,CHDOMN]	; Pointer to our chaosnet domain name
 	DO.
 	  ILDB T3,T2
 	  IDPB T3,T1
@@ -1335,6 +1347,7 @@ ifn 0,<
 
 ; String to append to domain-name-formatted address.
 CHADDR:	BYTE(7) 7,"C","H","-","A","D","D","R",0
+CHDOMN: BYTE(7) 3,"N","E","T",0
 
 ; There should be a conditional PRINTX here that checks to be
 ; sure CHADDR and associated stuff aren't too long for buffer.
@@ -1890,7 +1903,7 @@ QCGADR:	CAIE T2,QC.IN		; Internet?
 IFN CHAOS,<
 	CAIE T2,QC.CH		; Chaosnet?
 	IFSKP.
-	  MOVE T1,CH.A.ADDR(Q1)	; Get address
+	  MOVE T1,CH.A.ADDR(T1)	; Get address
 	  ; Ought to compare against CHDOMN
 	  ; to be sure this is right chaosnet.
 	  ; If it isn't, return -1 as goodness,

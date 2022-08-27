@@ -6,6 +6,8 @@ See [https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation](t
 
 For transmitting and receiving Chaosnet packets, the standard Chaos-over-IP encapsulation is used ([https://github.com/bictorv/chaosnet-bridge](see description)), so you need to have TCP/IP configured and working.
 
+See [https://chaosnet.net](Chaosnet.net) for more info about Chaosnet.
+
 ## Installation
 
 To generate the monitor, submit `<MONITOR-SOURCES>MONGEN.CTL`.
@@ -18,9 +20,10 @@ To generate the exec, submit `<EXEC-SOURCES>EXCGEN.CTL`.
 
 In `SYSTEM:INTERNET.ADDRESS`, add the following parameters for your IPNI#0
 - `CHAOS-ADDRESS:`*nnnn* where *nnnn* is your octal Chaosnet  address
-- `CHAOS-IP:`*a.b.c.d* where *a.b.c.d* is the IP address of a [https://github.com/bictorv/chaosnet-bridge](Chaosnet bridge program) which is configured to accept Chaos-over-IP from the IP of your TOPS-20 system (see below).
+- `CHAOS-IP-GATEWAY:`*a.b.c.d* where *a.b.c.d* is the IP address of a [https://github.com/bictorv/chaosnet-bridge](Chaosnet bridge program) which is configured to accept Chaos-over-IP from the IP of your TOPS-20 system (see below).
+- `CHAOS-ADDR-DOMAIN:`*dname* to set the address DNS domain to *dname*, default `CH-ADDR.NET`.
 
-More options will appear.
+(Note that you may want to use short-but-nonambiguous keywords, since the default buffer for parsing `INTERNET.ADDRESS` is quite short in a standard monitor, which you may occasionally want to use.)
 
 ### Chaosnet bridge
 You need to configure your [https://github.com/bictorv/chaosnet-bridge](Chaosnet bridge) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
@@ -35,6 +38,8 @@ Out-of-the-box, the system responds on `STATUS` packets, e.g. sent by HOSTAT pro
 
 Both simple RFC-ANS protocols and stream protocols seem to work.
 
+GTDOM% handles the CHaosnet class (3).
+
 ### *When the various tool programs have appeared*
 
 If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get all unclaimed RFC packets, and search for server programs `SYSTEM:CHAOS`.*contact* and start them.  See [https://chaosnet.net/amber.html#Server-Programs-1](the Chaosnet report) for documentation. 
@@ -43,6 +48,9 @@ There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK`
 
 ## What does not work yet
 
-- GTHST/GTDOM etc doesn't quite work yet (so use numeric addresses where needed/possible).
 - NVTs (Network Virtual Terminals) don't work, so no Supdup yet.
 - DECnet is disabled for now, so that doesn't work.
+
+## What should be done later
+
+RESOLV should (be able to) use separate DNS servers for IN and CH classes.

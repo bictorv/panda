@@ -1668,24 +1668,44 @@ ADCHDN:	call gch		;Read terminator of keyword
 	else.
 	 setz t2,
 	endif.
-	push p,t1
-	push p,t3
-	push p,t4
-	move t1,[point 7,chaddn]
 	move t4,[point 7,tmpbuf]
+	call padchd		;Parse chaos addr domain
+	ret
+
+;; Parse "here.is.a.dom.ain" pointed to by t4
+;; to DNS data format, label by label with length bytes
+padchd::saveac <t1,t3,p1,p2>
+	setzb p1,p2
+	;; move t4,[point 7,tmpbuf]
+	move t3,[point 7,chaddn]
+	push p,t4		;Save beginning of label
 	do.
-	 ildb t3,t4
-	 came t3,t2		;terminator?
-	 ifnsk.
-	  idpb t3,t1		;no, copy it
-	  loop.
+	 ildb t1,t4
+	 ifn. t1
+	  ;; there was a byte
+	   aos p1		;count it
+	   caie t1,"."
+	    loop.
+	   sos p1		;Un-count dot
+	 else.
+	  ;; If we found an empty label, end it all.
+	  jumpe p1,endlp.
 	 endif.
-	 setz t3,		;terminate here
-	 idpb t3,t1
+	 ;; Found dot (or null), so end of label
+	 idpb p1,t3		;Write length byte
+	 pop p,p2		;Get beg ptr
+	 do.
+	  ildb t1,p2		;copy p1 bytes
+	  pbout%
+	  idpb t1,t3
+	  sojg p1,top.
+	 od.
+	 push p,t4		;Save beginning of next label
+	 loop.
 	od.
 	pop p,t4
-	pop p,t3
-	pop p,t1
+	setz t1,
+	idpb t1,t3		;Make sure we end with an empty label
 	ret
 
 adchdr: jsp t1,adrerr
