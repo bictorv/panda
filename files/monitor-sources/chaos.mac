@@ -1738,6 +1738,9 @@ FRHTBL==.-FRHTAB
 MTOFRH:	XCTUM [SKIPN T2,3]	;GET HOST IF SPEC'ED
 	 LOAD T2,CHAHST,(CONN)	;ELSE GET FOREIGN HOST FOR CONN
 Printx <This will not work because T1 will be an extended pointer (hstsec) now>
+	stkvar <<hstnm,^d50/5>>
+	movei 1,hstnm
+	hrli t1,(point 7)
 	CALL NAMHST		;GET NAME INTO T1
 	 JRST MTOFR0		;NO NAME, UNFRIENDLY
 	MOVE T4,T1		;SAVE AWAY
@@ -2891,6 +2894,31 @@ HSTNAM:	JUMPE T1,RSKP		;RETURN 0 (BUT OK) IF NO STRING
 ;3031 ENTER HERE IF T1 ALREADY CONTAINS A BYTEPOINTER
 HSTN$1:	EA.ENT			;XX3026 Must be sect. 1 for extended host table
 	SAVEAC <T2,T3,T4,Q2,F1>	;XX3026 SAVE WORK REGS
+ife 0,<	;; First try numeric, then GTDOM%
+	STKVAR <OHSTNT>
+	MOVEM t1,OHSTNT		;SAVE NAME REF FOR LATER USE
+	ildb t1,t1
+	jumpe t1,rskp		;Null string OK (but 0)
+	move t2,ohstnt
+	call hstnm1		;See if it is numeric (@@@@ i.e. begins numeric)
+	ifskp.
+	 ifn. t1
+	  retskp		;Got a number, done
+	 endif.
+	endif.
+	movx t1,.gthsn!gd%qcl
+	move t2,ohstnt
+	movei t3,3		;qc.ch		;Chaos class
+	gtdom%
+	ifjer.
+	 bug.(inf,hstnz,chaos,soft,<HSTNAM call to GTDOM failed>,<<t1,err>>)
+	 setz t1,		;Sorry
+	 ret
+	endif.
+	move t1,t3
+	retskp			;Success
+>
+ifn 0,<	;; Old code
 	STKVAR <OHSTNT,<HSTNS,^D50/5>,LHSTNS> ;ORIGINAL STRING, COPY OF STRING, WD LENGTH
 	MOVEM T1,OHSTNT		;SAVE NAME REF FOR LATER USE
 	ILDB T1,T1		;GET FIRST
@@ -2957,10 +2985,12 @@ HSTNM9:	JUMPE T1,HSTNM1		;RAN OUT OF ENTRIES, TRY NUMBER SPEC
 
 HNMPNW:	POINTR T2,ADD%NW
 HNMPCA:	POINTR T2,ADD%CA
+>; end old code
 
 ;TRY FOR A NUMBER SPEC IF THE ABOVE HAIR FAILS
 HSTNM1:	SETZ T1,		;BUILD HOST NUMBER HERE
-	MOVE T2,OHSTNT		;GET BACK ORIGINAL SPEC REF
+	;; Use pointer in t2, can't call it otherwise
+	;;MOVE T2,OHSTNT		;GET BACK ORIGINAL SPEC REF
 HSTNM2:	ILDB T3,T2
 	JUMPE T3,RSKP
 	CAIL T3,"0"
@@ -2973,6 +3003,37 @@ HSTNM2:	ILDB T3,T2
 ;HOST NUMBER INTO HOST, NUMBER IN T2, RETURN SKIP IN T1 IF FOUND
 NAMHST:	SAVEQ
 	EA.ENT			;XX3026 Enter section 1 for extended host table
+ife 0,<	;; Just use GTDOM%
+	saveac <t2,t3,t4>
+repeat 1,<
+	;; But first check if it's just me
+	came t2,mychad
+	ifskp.
+	 push p,t1		;Save dest bp
+	 move t3,[point 7,myhnam]	;Copy this
+	 do.
+	  ildb t4,t3
+	  idpb t4,t1
+	  jumpn t4,top.
+	 od.
+	 pop p,t1		;Get orig dest bp
+	 retskp			;Success
+	endif.
+>
+	push p,t1		;Save dest bp
+	move t3,t2		;Host number
+	move t2,t1		;Dest bp
+	movx t1,.gthns!gd%qcl
+	movei t4,3		;qc.ch		;Chaos class
+	gtdom%
+	ifjer.
+	 bug.(inf,namhsz,chaos,soft,<NAMHST call to GTDOM failed>,<<t1,err>>)
+	 ret			;Fail
+	endif.
+	pop p,t1		;Get orig dest bp
+	retskp
+>
+ifn 0,<	;; Old code
 	MOVE T1,CHANET
 	DPB T1,HNMPNW		;SET NETWORK AS CHAOS
 	PUSH P,T2		;SAVE HOST ADDRESS
@@ -3006,6 +3067,7 @@ NAMHS4:	HLRZ T1,ADLSIT(T1)	;XX3026 SITE ENTRY
 	HLRZ T1,STLNAM(T1)	;XX3026 NAME
 	ADD T1,HSTADR		;XX3026 Absolute pointer
 	RETSKP
+>; end old code
 
 ;3031 Begin addition
 SUBTTL	CHANM% JSYS Interface to CHAOS Host Information
@@ -3100,10 +3162,21 @@ DEFINE GL7BP(AC) <
 ;;
 				;THIS MUST BE RUNNING IN SECTION 1...
 CHNNTS:	UMOVE T2,3		;GET HOST NUMBER
+ife 0,<	;; Make a buffer here
+	stkvar <<hstnm,^d50/5>>
+	movei t1,hstnm
+	hrli t1,(point 7)
+>
 	CALL NAMHST		;LOOK IT UP
 	 JRST [ITERR (CHNX02)]	;NOT THERE?
+ife 0,<	;; Simpler
+	movei t2,hstnm
+	hrli t2,(point 7)
+>
+ifn 0,<
 	MOVE T2,T1		;T1 HAS (EXT) ADDR OF ASCIZ NAMESTRING
 	GL7BP T2		;T2 NOW IS BP TO NAMESTRING
+>
 	PUSH P,T2		;SAVE T2 OVER RDCBP CALL
 	UMOVE T1,2		;GET USER'S DEST BP
 	CALL RDCBP		;CHECK FOR VALID BP
