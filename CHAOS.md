@@ -14,7 +14,7 @@ To generate the monitor, submit `<MONITOR-SOURCES>MONGEN.CTL`.
 
 To generate the exec, submit `<EXEC-SOURCES>EXCGEN.CTL`.
 
-*(To appear: various tool programs.)*
+You can compile the various programs in `<CHAOS.SYSTEM>` and install them as indicated in the `-READ-.-THIS-` file.
 
 ## Configuration
 
@@ -42,13 +42,13 @@ GTDOM% handles the CHaosnet class (3). (There are not yet MACRO symbols for the 
 
 CHANM% uses GTDOM%, so works. (And should be documented.)
 
-### *When the various tool programs have appeared*
+### Server programs
 
 If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get all unclaimed RFC packets, and search for server programs `SYSTEM:CHAOS`.*contact* and start them.  See [https://chaosnet.net/amber.html#Server-Programs-1](the Chaosnet report) for documentation. 
 
-There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts.
+There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see `<CHAOS.SYSTEM>-READ-.-THIS-`.
 
-The `FINGER` program has been fixed to finger Chaosnet hosts.
+The `FINGER` program has been fixed to finger Chaosnet hosts. You will need to recompile it (in `<FINGER>`) and install it (in `<SUBSYS>`).
 
 ## Notes on programming
 Some notes in addition to  [https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation](the Chaosnet report) documentation.
