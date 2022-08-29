@@ -1933,10 +1933,23 @@ IFN CHAOS,<
 	CAIE T2,QC.CH
 	IFSKP.
 	  MOVEI T2,1		; All addresses look alike without a routing
+	  ;;call hstguc		; CHeck goodness on Chaos
 	  JRST QCGGOK		; table, so the all win, I guess
 	ENDIF.
 >;IFN CHAOS
 	RETBAD (GTDX12)
+
+ifn chaos,<
+hstguc:	saveac <t3,t4>
+	movei t2,1		;Default
+	move t3,mychad
+	lsh t3,-8
+	move t4,t1
+	lsh t4,-8
+	camn t3,t4
+	 movei t2,2		;Same subnet, better!
+	ret
+>
 
 QCGGOK:	SAVEAC <T1>
 	SKIPE T1,RPTR		; Random number pointer set up?
