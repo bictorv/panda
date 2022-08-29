@@ -38,7 +38,9 @@ Out-of-the-box, the system responds on `STATUS` packets, e.g. sent by HOSTAT pro
 
 Both simple RFC-ANS protocols and stream protocols seem to work.
 
-GTDOM% handles the CHaosnet class (3).
+GTDOM% handles the CHaosnet class (3). (There are not yet MACRO symbols for the classes.)
+
+CHANM% uses GTDOM%, so works. (And should be documented.)
 
 ### *When the various tool programs have appeared*
 
@@ -46,11 +48,23 @@ If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get 
 
 There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts.
 
+The `FINGER` program has been fixed to finger Chaosnet hosts.
+
+## Notes on programming
+Some notes in addition to  [https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation](the Chaosnet report) documentation.
+
+- To open a connection to a host, open `CHA:`*host*`.`*contact* as the documentation says. Here *host* can be an octal Chaosnet address or a host name whose address can be found in DNS (using the `GTDOM%` system call). If the name contains dots (.), make sure to quote them with ^V since the file name parsing will otherwise complain.
+- If the *contact* contains arguments, similarly quote special characters with ^V. You can/may/should use underscore (`_`) for space (they will become spaces again on the net).
+- Before closing the connection with `CLOSF%`, you may want to make sure your output has reached the other end. This can be done using `SOUTR` or the `.MOSND` operation for `MTOPR`, possibly followed by `.MOEOF` (to send an EOF) and `.MONOP` (to wait for it to get acked). This is silly, but as it is, needed/useful.
+
 ## What does not work yet
 
 - NVTs (Network Virtual Terminals) don't work, so no Supdup yet.
 - DECnet is disabled for now, so that doesn't work.
+- some code still uses ancient HOSTS2 host tables rather than DNS
 
 ## What should be done later
 
-RESOLV should (be able to) use separate DNS servers for IN and CH classes.
+- RESOLV should (be able to) use separate DNS servers for IN and CH classes, since CH can often be served by DNS servers which don't provide IN to just anyone, and IN servers in general have no clue about CH.
+- SYSDPY should do things (show conns, windows, whatnot - like PEEK in ITS.)
+
