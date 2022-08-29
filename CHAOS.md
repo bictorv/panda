@@ -25,6 +25,12 @@ In `SYSTEM:INTERNET.ADDRESS`, add the following parameters for your IPNI#0
 
 (Note that you may want to use short-but-nonambiguous keywords, since the default buffer for parsing `INTERNET.ADDRESS` is quite short in a standard monitor, which you may occasionally want to use.)
 
+### DNS resolver
+
+To make parsing of Chaosnet host names work, you need to edit `DOMAIN:RESOLV.CONFIG` to use a DNS server which has CHaosnet class data, such as the `DNS.Chaosnet.NET` host (look up its IPv4 address). Use the `DSERVE` directive in the config.
+
+You may also want to include the domain `Chaosnet.NET.` in your `RSEARCH` directives, to get shorthand addresses to all ITS hosts on Chaosnet.
+
 ### Chaosnet bridge
 You need to configure your [https://github.com/bictorv/chaosnet-bridge](Chaosnet bridge) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
 
