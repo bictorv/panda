@@ -23,7 +23,7 @@ In `SYSTEM:INTERNET.ADDRESS`, add the following parameters for your IPNI#0
 - `CHAOS-IP-GATEWAY:`*a.b.c.d* where *a.b.c.d* is the IP address of a [https://github.com/bictorv/chaosnet-bridge](Chaosnet bridge program) which is configured to accept Chaos-over-IP from the IP of your TOPS-20 system (see below).
 - `CHAOS-ADDR-DOMAIN:`*dname* to set the address DNS domain to *dname*, default `CH-ADDR.NET`.
 
-(Note that you may want to use short-but-nonambiguous keywords, since the default buffer for parsing `INTERNET.ADDRESS` is quite short in a standard monitor, which you may occasionally want to use.)
+(Note that you may want to use short-but-nonambiguous keywords, since the default buffer for parsing `INTERNET.ADDRESS` is quite short in a standard monitor (134 chars), which you may occasionally want to use.)
 
 ### DNS resolver
 
@@ -46,13 +46,13 @@ Both simple RFC-ANS protocols and stream protocols seem to work.
 
 GTDOM% handles the CHaosnet class (3). (There are not yet MACRO symbols for the classes.)
 
-CHANM% uses GTDOM%, so works. (And should be documented.)
+CHANM% uses GTDOM%, so works. See [CHANM.md](documentation).
 
 ### Server programs
 
 If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get all unclaimed RFC packets, and search for server programs `SYSTEM:CHAOS`.*contact* and start them.  See [https://chaosnet.net/amber.html#Server-Programs-1](the Chaosnet report) for documentation. 
 
-There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see `<CHAOS.SYSTEM>-READ-.-THIS-`.
+There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see `[files/chaos/system/-read-.-this-](<CHAOS.SYSTEM>-READ-.-THIS-)`.
 
 The `FINGER` program has been fixed to finger Chaosnet hosts. You will need to recompile it (in `<FINGER>`) and install it (in `<SUBSYS>`).
 
@@ -67,7 +67,6 @@ Some notes in addition to  [https://chaosnet.net/amber.html#The-TOPS_002d20_002f
 
 - NVTs (Network Virtual Terminals) don't work, so no Supdup yet.
 - DECnet is disabled for now, so that doesn't work.
-- some code still uses ancient HOSTS2 host tables rather than DNS
 
 ## What should be done later
 
