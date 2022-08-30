@@ -4,7 +4,7 @@ Based on [old code](https://github.com/PDP-10/sri-nic/tree/master/files/src/mit/
 
 See [the Chaosnet report](https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation) for documentation.
 
-For transmitting and receiving Chaosnet packets, the standard Chaos-over-IP encapsulation is used ([see description](https://github.com/bictorv/chaosnet-bridge/README.md#chaos-over-ip)), so you need to have TCP/IP configured and working.
+For transmitting and receiving Chaosnet packets, the standard Chaos-over-IP encapsulation is used ([see description](https://github.com/bictorv/chaosnet-bridge/blob/master/README.md#chaos-over-ip)), so you need to have TCP/IP configured and working.
 
 See [Chaosnet.net](https://chaosnet.net) for more info about Chaosnet.
 
@@ -32,7 +32,7 @@ To make parsing of Chaosnet host names work, you need to edit `DOMAIN:RESOLV.CON
 You may also want to include the domain `Chaosnet.NET.` in your `RSEARCH` directives, to get shorthand addresses to all ITS hosts on Chaosnet.
 
 ### Chaosnet bridge
-You need to configure your [Chaosnet bridge](https://github.com/bictorv/chaosnet-bridge/CONFIGURATION.md) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
+You need to configure your [Chaosnet bridge](https://github.com/bictorv/chaosnet-bridge/blob/master/CONFIGURATION.md) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
 
 `link chip` *x.y.z.w* `host` *nnnn* `myaddr` *mmmm*
 
