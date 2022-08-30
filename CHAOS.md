@@ -14,7 +14,7 @@ To generate the monitor, submit `<MONITOR-SOURCES>MONGEN.CTL`.
 
 To generate the exec, submit `<EXEC-SOURCES>EXCGEN.CTL`.
 
-You can compile the various programs in `<CHAOS.SYSTEM>` and install them as indicated in the `-READ-.-THIS-` file.
+You can compile the various programs in `<CHAOS.SYSTEM>` and install them as indicated in the `-READ-.-THIS-` file (see below).
 
 ## Configuration
 
@@ -52,7 +52,7 @@ CHANM% uses GTDOM%, so works. See [documentation](CHANM.md).
 
 If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get all unclaimed RFC packets, and search for server programs `SYSTEM:CHAOS`.*contact* and start them.  See [the Chaosnet report](https://chaosnet.net/amber.html#Server-Programs-1) for documentation. 
 
-There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see `[<CHAOS.SYSTEM>-READ-.-THIS-](files/chaos/system/-read-.-this-)`.
+There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see [`<CHAOS.SYSTEM>-READ-.-THIS-`](files/chaos/system/-read-.-this-).
 
 The `FINGER` program has been fixed to finger Chaosnet hosts. You will need to recompile it (in `<FINGER>`) and install it (in `<SUBSYS>`).
 
