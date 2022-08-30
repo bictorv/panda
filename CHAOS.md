@@ -4,7 +4,7 @@ Based on [old code](https://github.com/PDP-10/sri-nic/tree/master/files/src/mit/
 
 See [the Chaosnet report](https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation) for documentation.
 
-For transmitting and receiving Chaosnet packets, the standard Chaos-over-IP encapsulation is used ([see description](https://github.com/bictorv/chaosnet-bridge)), so you need to have TCP/IP configured and working.
+For transmitting and receiving Chaosnet packets, the standard Chaos-over-IP encapsulation is used ([see description](https://github.com/bictorv/chaosnet-bridge/README.md#chaos-over-ip)), so you need to have TCP/IP configured and working.
 
 See [Chaosnet.net](https://chaosnet.net) for more info about Chaosnet.
 
@@ -14,13 +14,13 @@ To generate the monitor, submit `<MONITOR-SOURCES>MONGEN.CTL`.
 
 To generate the exec, submit `<EXEC-SOURCES>EXCGEN.CTL`.
 
-You can compile the various programs in `<CHAOS.SYSTEM>` and install them as indicated in the `-READ-.-THIS-` file (see below).
+You can compile the various programs in `<CHAOS.SYSTEM>` and install them as indicated in the `-READ-.-THIS-` file (see [below](#server-programs)).
 
 ## Configuration
 
 In `SYSTEM:INTERNET.ADDRESS`, add the following parameters for your IPNI#0
 - `CHAOS-ADDRESS:`*nnnn* where *nnnn* is your octal Chaosnet  address
-- `CHAOS-IP-GATEWAY:`*a.b.c.d* where *a.b.c.d* is the IP address of a [Chaosnet bridge program](https://github.com/bictorv/chaosnet-bridge) which is configured to accept Chaos-over-IP from the IP of your TOPS-20 system (see below).
+- `CHAOS-IP-GATEWAY:`*a.b.c.d* where *a.b.c.d* is the IP address of a [Chaosnet bridge program](https://github.com/bictorv/chaosnet-bridge) which is configured to accept Chaos-over-IP from the IP of your TOPS-20 system (see [below](#chaosnet-bridge)).
 - `CHAOS-ADDR-DOMAIN:`*dname* to set the address DNS domain to *dname*, default `CH-ADDR.NET`.
 
 (Note that you may want to use short-but-nonambiguous keywords, since the default buffer for parsing `INTERNET.ADDRESS` is quite short in a standard monitor (134 chars), which you may occasionally want to use.)
@@ -32,7 +32,7 @@ To make parsing of Chaosnet host names work, you need to edit `DOMAIN:RESOLV.CON
 You may also want to include the domain `Chaosnet.NET.` in your `RSEARCH` directives, to get shorthand addresses to all ITS hosts on Chaosnet.
 
 ### Chaosnet bridge
-You need to configure your [Chaosnet bridge](https://github.com/bictorv/chaosnet-bridge) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
+You need to configure your [Chaosnet bridge](https://github.com/bictorv/chaosnet-bridge/CONFIGURATION.md) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
 
 `link chip` *x.y.z.w* `host` *nnnn* `myaddr` *mmmm*
 
@@ -40,13 +40,13 @@ where *x.y.z.w* is the IP of your TOPS-20 system, *nnnn* is its Chaosnet address
 
 ## What works
 
-Out-of-the-box, the system responds on `STATUS` packets, e.g. sent by HOSTAT programs. It only sends two meters: the number of input and output packets.
+Out-of-the-box, the system responds on `STATUS` packets, e.g. sent by HOSTAT or CHATST programs (see [here](https://chaosnet.net/amber.html#Status-1)). It only sends two meters: the number of input and output packets.
 
 Both simple RFC-ANS protocols and stream protocols seem to work.
 
-GTDOM% handles the CHaosnet class (3). (There are not yet MACRO symbols for the classes.)
+`GTDOM%` handles the CHaosnet class (3). (There are not yet MACRO symbols for the classes.)
 
-CHANM% uses GTDOM%, so works. See [documentation](CHANM.md).
+`CHANM%` uses `GTDOM%`, so works. See [documentation](CHANM.md).
 
 ### Server programs
 
@@ -59,8 +59,8 @@ The `FINGER` program has been fixed to finger Chaosnet hosts. You will need to r
 ## Notes on programming
 Some notes in addition to  [the Chaosnet report](https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation) documentation.
 
-- To open a connection to a host, open `CHA:`*host*`.`*contact* as the documentation says. Here *host* can be an octal Chaosnet address or a host name whose address can be found in DNS (using the `GTDOM%` system call). If the name contains dots (.), make sure to quote them with ^V since the file name parsing will otherwise complain.
-- If the *contact* contains arguments, similarly quote special characters with ^V. You can/may/should use underscore (`_`) for space (they will become spaces again on the net).
+- To open a connection to a host, open `CHA:`*host*`.`*contact* as the documentation says. Here *host* can be an octal Chaosnet address or a host name whose address can be found in DNS (using the `GTDOM%` system call). If the name contains dots (.), make sure to quote them with `^V` since the file name parsing will otherwise complain.
+- If the *contact* contains arguments, similarly quote special characters with `^V`. You can/may/should use underscore (`_`) for space (they will become spaces again on the net).
 - Before closing the connection with `CLOSF%`, you may want to make sure your output has reached the other end. This can be done using `SOUTR` or the `.MOSND` operation for `MTOPR`, possibly followed by `.MOEOF` (to send an EOF) and `.MONOP` (to wait for it to get acked). This is silly, but as it is, needed/useful.
 
 ## What does not work yet
@@ -72,4 +72,8 @@ Some notes in addition to  [the Chaosnet report](https://chaosnet.net/amber.html
 
 - RESOLV should (be able to) use separate DNS servers for IN and CH classes, since CH can often be served by DNS servers which don't provide IN to just anyone, and IN servers in general have no clue about CH.
 - SYSDPY should do things (show conns, windows, whatnot - like PEEK in ITS.)
+- MMAILR support would be nice!
 
+## Bugs
+
+Of course! Please report them to me.
