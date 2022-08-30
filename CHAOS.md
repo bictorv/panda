@@ -1,12 +1,12 @@
 # Chaosnet support for TOPS-20
 
-Based on [https://github.com/PDP-10/sri-nic/tree/master/files/src/mit/monitor](old code) for TOPS-20 version 5 from MIT and SRI, ported into the PANDA TOPS-20 version 7.
+Based on [old code](https://github.com/PDP-10/sri-nic/tree/master/files/src/mit/monitor) for TOPS-20 version 5 from MIT and SRI, ported into the PANDA TOPS-20 version 7.
 
-See [https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation](the Chaosnet report) for documentation.
+See [the Chaosnet report](https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation) for documentation.
 
-For transmitting and receiving Chaosnet packets, the standard Chaos-over-IP encapsulation is used ([https://github.com/bictorv/chaosnet-bridge](see description)), so you need to have TCP/IP configured and working.
+For transmitting and receiving Chaosnet packets, the standard Chaos-over-IP encapsulation is used ([see description](https://github.com/bictorv/chaosnet-bridge)), so you need to have TCP/IP configured and working.
 
-See [https://chaosnet.net](Chaosnet.net) for more info about Chaosnet.
+See [Chaosnet.net](https://chaosnet.net) for more info about Chaosnet.
 
 ## Installation
 
@@ -20,7 +20,7 @@ You can compile the various programs in `<CHAOS.SYSTEM>` and install them as ind
 
 In `SYSTEM:INTERNET.ADDRESS`, add the following parameters for your IPNI#0
 - `CHAOS-ADDRESS:`*nnnn* where *nnnn* is your octal Chaosnet  address
-- `CHAOS-IP-GATEWAY:`*a.b.c.d* where *a.b.c.d* is the IP address of a [https://github.com/bictorv/chaosnet-bridge](Chaosnet bridge program) which is configured to accept Chaos-over-IP from the IP of your TOPS-20 system (see below).
+- `CHAOS-IP-GATEWAY:`*a.b.c.d* where *a.b.c.d* is the IP address of a [Chaosnet bridge program](https://github.com/bictorv/chaosnet-bridge) which is configured to accept Chaos-over-IP from the IP of your TOPS-20 system (see below).
 - `CHAOS-ADDR-DOMAIN:`*dname* to set the address DNS domain to *dname*, default `CH-ADDR.NET`.
 
 (Note that you may want to use short-but-nonambiguous keywords, since the default buffer for parsing `INTERNET.ADDRESS` is quite short in a standard monitor (134 chars), which you may occasionally want to use.)
@@ -32,7 +32,7 @@ To make parsing of Chaosnet host names work, you need to edit `DOMAIN:RESOLV.CON
 You may also want to include the domain `Chaosnet.NET.` in your `RSEARCH` directives, to get shorthand addresses to all ITS hosts on Chaosnet.
 
 ### Chaosnet bridge
-You need to configure your [https://github.com/bictorv/chaosnet-bridge](Chaosnet bridge) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
+You need to configure your [Chaosnet bridge](https://github.com/bictorv/chaosnet-bridge) to accept Chaos-over-IP from your TOPS-20 system, e.g. using
 
 `link chip` *x.y.z.w* `host` *nnnn* `myaddr` *mmmm*
 
@@ -46,18 +46,18 @@ Both simple RFC-ANS protocols and stream protocols seem to work.
 
 GTDOM% handles the CHaosnet class (3). (There are not yet MACRO symbols for the classes.)
 
-CHANM% uses GTDOM%, so works. See [CHANM.md](documentation).
+CHANM% uses GTDOM%, so works. See [documentation](CHANM.md).
 
 ### Server programs
 
-If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get all unclaimed RFC packets, and search for server programs `SYSTEM:CHAOS`.*contact* and start them.  See [https://chaosnet.net/amber.html#Server-Programs-1](the Chaosnet report) for documentation. 
+If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get all unclaimed RFC packets, and search for server programs `SYSTEM:CHAOS`.*contact* and start them.  See [the Chaosnet report](https://chaosnet.net/amber.html#Server-Programs-1) for documentation. 
 
-There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see `[files/chaos/system/-read-.-this-](<CHAOS.SYSTEM>-READ-.-THIS-)`.
+There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see `[<CHAOS.SYSTEM>-READ-.-THIS-](files/chaos/system/-read-.-this-)`.
 
 The `FINGER` program has been fixed to finger Chaosnet hosts. You will need to recompile it (in `<FINGER>`) and install it (in `<SUBSYS>`).
 
 ## Notes on programming
-Some notes in addition to  [https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation](the Chaosnet report) documentation.
+Some notes in addition to  [the Chaosnet report](https://chaosnet.net/amber.html#The-TOPS_002d20_002fTENEX-Implementation) documentation.
 
 - To open a connection to a host, open `CHA:`*host*`.`*contact* as the documentation says. Here *host* can be an octal Chaosnet address or a host name whose address can be found in DNS (using the `GTDOM%` system call). If the name contains dots (.), make sure to quote them with ^V since the file name parsing will otherwise complain.
 - If the *contact* contains arguments, similarly quote special characters with ^V. You can/may/should use underscore (`_`) for space (they will become spaces again on the net).
