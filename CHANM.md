@@ -7,9 +7,9 @@ Obtains information about Chaosnet hosts.
 For Chaosnet systems only.
 
 ## Calling sequence
-AC1: Function code
-AC2: Function-specific argument
-AC3: Function-specific argument
+- AC1: Function code
+- AC2: Function-specific argument
+- AC3: Function-specific argument
 
 ## Returns
 +1: Always.
