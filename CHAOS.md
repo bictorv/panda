@@ -52,7 +52,7 @@ Both simple RFC-ANS protocols and stream protocols seem to work.
 
 If you install `CHARFC.EXE` in `SYSTEM:`, and start it in a SYSJOB, it will get all unclaimed RFC packets, and search for server programs `SYSTEM:CHAOS`.*contact* and start them.  See [the Chaosnet report](https://chaosnet.net/amber.html#Server-Programs-1) for documentation. 
 
-There are simple server programs for the `TIME`, `UPTIME`, `NAME` and `LIMERICK` contacts, see [`<CHAOS.SYSTEM>-READ-.-THIS-`](files/chaos/system/-read-.-this-).
+There are simple server programs for the `TIME`, `UPTIME`, `NAME`, `LIMERICK`, and `FILE` contacts, see [`<CHAOS.SYSTEM>-READ-.-THIS-`](files/chaos/system/-read-.-this-).
 
 The `FINGER` program has been fixed to finger Chaosnet hosts. You will need to recompile it (in `<FINGER>`) and install it (in `<SUBSYS>`).
 

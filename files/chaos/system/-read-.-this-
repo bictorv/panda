@@ -11,3 +11,8 @@ Install CHAFIN.EXE as SYSTEM:CHAOS.NAME (to start SYS:FINGER)
 Install TIMSER.EXE as SYSTEM:CHAOS.TIME
 Install UPTIME.EXE as SYSTEM:CHAOS.UPTIME
 Install LIMRCK.EXE as SYSTEM:CHAOS.LIMERICK (note longer name)
+
+Set the above to be ephemeral:
+@set file system:chaos.* ephemeral
+
+Install FILE.EXE as SYSTEM:CHAOS.FILE (but NOT ephemeral)
